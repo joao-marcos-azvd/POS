@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de tarefas</title>
+    <link rel="stylesheet" href="../static/cadastro.css">
+</head>
+<body>
+    <h1>Cadastre aqui sua tarefa</h1>
+    <form action="FAZER!" method="post" class="form_cad">
+        <input type="text" name="descricao_cad_tar" placeholder="Descrição da sua tarefa">
+        <input type="number" name="prioridade_cad_tar" min="1" max="10" placeholder="Prioridade">
+        <select>
+            <option value="True">Concluída</option>
+            <option value="False" selected>Pendente</option> <!-- Selecionada por padrão -->
+          </select>
+        <input type="submit" value="Cadastrar">
+    </form>
+</body>
+</html>
