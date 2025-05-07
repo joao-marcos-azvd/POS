@@ -1,4 +1,5 @@
-# pip install fastapi uvicorn
+# pip install fastapi uvicorn 
+# pip install -r requeriments.txt
 # python -m venv .virtual
 # .\.virtual\Scripts\activate
 # uvicorn main:app

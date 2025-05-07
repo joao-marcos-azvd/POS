@@ -1,6 +1,8 @@
 # pip install fastapi uvicorn pydantic
 # pip freeze > requirements.txt
 # uvicorn main:app
+# http://127.0.0.1:8000/docs > Vai pra págia da API
+
 from fastapi import FastAPI,HTTPException
 from models import Tarefa
 from typing import List
