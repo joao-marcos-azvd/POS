@@ -1,5 +1,7 @@
+# COMENTAR ESSE CÓDIGO
 from pydantic import BaseModel
 from datetime import date
+from typing import List
 
 class Usuario(BaseModel):
     username:str
@@ -13,12 +15,11 @@ class Livro(BaseModel):
 
 class Biblioteca(BaseModel):
     nome:str
-    acervo:list
-    usuario:list 
+    acervo:List[Livro]
+    usuario:List[Usuario]
 
 class Emprestimo(BaseModel):
     usuario:Usuario
     livro:Livro
     data_emprestimo:date
     data_devolucao:date
-

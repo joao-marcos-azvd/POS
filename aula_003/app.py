@@ -4,6 +4,8 @@
 # .\.virtual\Scripts\activate
 # uvicorn main:app
 
+
+# COMENTAR ESSE CÓDIGO
 from fastapi import FastAPI, HTTPException
 from models import * # Importando os modelos do models.py
 from typing import List # Isso aqui é pra validar um tipo de dado, o LIST
@@ -15,7 +17,6 @@ usuarios: List[Usuario] = []
 livros: List[Livro] = []
 emprestimos: List[Emprestimo] = []
 bibliotecas: List[Biblioteca] = []
-emprestimos: List[Emprestimo] = []
 
  
 # USUÁRIO - + ou - comentado
@@ -28,11 +29,12 @@ def listar_usuarios():
 @app.post("/usuarios/", response_model=Usuario)
 def adicionar_user(usuario_criado:Usuario): # Aqui esse variável "usuario_criado" eu não entendi  tão bem, mas ela vai servir para criar o usuário.
     usuarios.append(usuario_criado) # Adicionamdo na lista de usuários
-    return usuario_criado # Retornamdo o usuário criado
+    return usuario_criado # Retornamdo o usuário criado 
+    # Posso tirar isso, é só remover o response_model=Usuario também
 
 # Rota de deletar o usuário
 @app.delete("/usuarios/{usuario_nome}", response_model=Usuario)
-def excluir_usuario(usuario_nome:str): # Varoável que vou usar pra saber qual usuário eu apago
+def excluir_usuario(usuario_nome:str): # Variável que vou usar pra saber qual usuário eu apago
     for num, usuario in enumerate(usuarios): # Usando um for pra vê de 1 em 1
         if usuario.username == usuario_nome: # Verificando de é o usuário
             del usuarios[num] # Apagando
