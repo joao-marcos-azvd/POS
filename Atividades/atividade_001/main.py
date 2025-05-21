@@ -59,3 +59,21 @@ def pesquisar_cliente(cliente_id:int):
         if cliente_id == cliente.cli_id:
             return clientes[index] #Achqo que é assim que ele retorna só um
     raise HTTPException(status_code=404, detail="Cliente inexistente!")
+
+# Rotas de Reservas
+# Rota para cadastrar uma nova reserva
+@app.post("/reservas/", response_model=Reserva)
+def cadastro_reserva(nova_reserva:Reserva):
+    for index, carro in enumerate(carros):
+        if carro.car_id == nova_reserva.res_id:
+            carros[index].car_disponivel = False
+            reservas.append(nova_reserva)
+            return nova_reserva
+        else: 
+            return "Esse carro já está reservado para outra pessoa"
+    raise HTTPException(status_code=404, detail="Esse carro não foi encontrado no registro")
+
+# Rota para listar todas as reservas
+@app.get("/reservas/", response_model=List[Reserva])
+def listar_reservas():
+    return reservas
