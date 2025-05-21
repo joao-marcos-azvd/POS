@@ -27,7 +27,7 @@ def listar_usuarios():
 
 # Rota para criar/adicionar usuários
 @app.post("/usuarios/", response_model=Usuario)
-def adicionar_user(usuario_criado:Usuario): # Aqui esse variável "usuario_criado" eu não entendi  tão bem, mas ela vai servir para criar o usuário.
+def adicionar_user(usuario_criado:Usuario): # Aqui esse variável "usuario_criado" serve como uma instancia de Usuario, servindo pra eu poder editar os dados na hora de criar o usuário.
     usuarios.append(usuario_criado) # Adicionamdo na lista de usuários
     return usuario_criado # Retornamdo o usuário criado 
     # Posso tirar isso, é só remover o response_model=Usuario também
