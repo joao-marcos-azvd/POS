@@ -60,20 +60,32 @@ def pesquisar_cliente(cliente_id:int):
             return clientes[index] #Achqo que é assim que ele retorna só um
     raise HTTPException(status_code=404, detail="Cliente inexistente!")
 
-# Rotas de Reservas
-# Rota para cadastrar uma nova reserva
+# Rotas de Reservas -- Comentar
+# Rota para cadastrar uma nova reserva -- Aqui tem falta validar o estado do carro!
+# Ainda tá com erro, só consigo cadastrar uma reserva
 @app.post("/reservas/", response_model=Reserva)
 def cadastro_reserva(nova_reserva:Reserva):
     for index, carro in enumerate(carros):
-        if carro.car_id == nova_reserva.res_id:
+        if carro.car_id == nova_reserva.res_carro_id and carro.car_disponivel == True:
             carros[index].car_disponivel = False
             reservas.append(nova_reserva)
             return nova_reserva
         else: 
-            return "Esse carro já está reservado para outra pessoa"
+            raise HTTPException(status_code=404, detail="Esse carro não está disponível")
     raise HTTPException(status_code=404, detail="Esse carro não foi encontrado no registro")
 
 # Rota para listar todas as reservas
 @app.get("/reservas/", response_model=List[Reserva])
 def listar_reservas():
     return reservas
+
+# Rota para remover um reserva!
+@app.delete("/reservas/{res_id}", response_model=Reserva)
+def remover_reserva(id_reserva:int):
+    for num_reserva, reserva in enumerate(reservas):
+        if reserva.res_id == id_reserva:
+            for index, carro in enumerate(carros): # Mudar o estado do carro!
+                if carro.car_id == reserva.res_carro_id:
+                    carros[index].car_disponivel = True
+                    reservas.pop(num_reserva)
+                    return(reserva)
