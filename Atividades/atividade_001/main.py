@@ -30,12 +30,12 @@ def atualizar_carro(carro_id:int, carro_atualizado:Carro): # Aqui eu pesso pra p
             return carro_atualizado
     raise HTTPException(status_code=404, detail="Carro não localizado!") #Isso aqui tá caso o carro não exista
 
-# Rota pr remover o carro
+# Rota pra remover o carro
 @app.delete("/carros/{carro_id}", response_model=Carro)
 def remover_carro(carro_id:int):
-    for index, carro in enumerate(carros):
+    for index, carro in enumerate(carros): # Percorrer a lista de carros
         if carro_id == carro.car_id:
-            del carros[index]
+            del carros[index] # Aqui eu removo o carro
             return carro
     raise HTTPException(status_code=404, detail="Carro inexistente!")
 
@@ -60,32 +60,36 @@ def pesquisar_cliente(cliente_id:int):
             return clientes[index] #Achqo que é assim que ele retorna só um
     raise HTTPException(status_code=404, detail="Cliente inexistente!")
 
-# Rotas de Reservas -- Comentar
-# Rota para cadastrar uma nova reserva -- Aqui tem falta validar o estado do carro!
-# Ainda tá com erro, só consigo cadastrar uma reserva
+# Rotas de Reservas
+# Rota para cadastrar uma nova reserva -- FALTA VALIDAR A DATA
 @app.post("/reservas/", response_model=Reserva)
 def cadastro_reserva(nova_reserva:Reserva):
-    for index, carro in enumerate(carros):
-        if carro.car_id == nova_reserva.res_carro_id and carro.car_disponivel == True:
-            carros[index].car_disponivel = False
-            reservas.append(nova_reserva)
-            return nova_reserva
-        else: 
+    for cli_index, cliente in enumerate(clientes): # Percorer a lista de clientes
+        if cliente.cli_id == nova_reserva.res_cliente_id: # Verificando se o cliente existe
+            for car_index, carro in enumerate(carros): # Esse for serve pra percorer a lista de carros
+                if carro.car_id == nova_reserva.res_carro_id and carro.car_disponivel == True: # Aqui eu verifico se o id é o mesmo e também se o carro tá disponível
+                    carros[car_index].car_disponivel = False # Se der tudo certo o carro altomaticamente fica como indisponível
+                    reservas.append(nova_reserva) # Adiciono a nova reserva
+                    return nova_reserva
+            # Se não der certo
             raise HTTPException(status_code=404, detail="Esse carro não está disponível")
-    raise HTTPException(status_code=404, detail="Esse carro não foi encontrado no registro")
+    # Se o clinete não existir
+    raise HTTPException(status_code=404, detail="Cliente inexistente")
 
 # Rota para listar todas as reservas
-@app.get("/reservas/", response_model=List[Reserva])
+@app.get("/reservas/", response_model=List[Reserva]) # Lista de reservas
 def listar_reservas():
     return reservas
 
 # Rota para remover um reserva!
 @app.delete("/reservas/{res_id}", response_model=Reserva)
 def remover_reserva(id_reserva:int):
-    for num_reserva, reserva in enumerate(reservas):
-        if reserva.res_id == id_reserva:
-            for index, carro in enumerate(carros): # Mudar o estado do carro!
-                if carro.car_id == reserva.res_carro_id:
-                    carros[index].car_disponivel = True
-                    reservas.pop(num_reserva)
+    for num_reserva, reserva in enumerate(reservas): # Percorrer a lista de reservas
+        if reserva.res_id == id_reserva: # Se o id passado por o mesmo
+            for index, carro in enumerate(carros): # Percorrer a lista de carros
+                if carro.car_id == reserva.res_carro_id: # Varifica o ID do carro
+                    carros[index].car_disponivel = True # Mudar o estado do carro
+                    reservas.pop(num_reserva) # Remove a reserva
                     return(reserva)
+        # Se a reserva não exite 
+        raise HTTPException(status_code=404, detail="Reserva inexistente!")
