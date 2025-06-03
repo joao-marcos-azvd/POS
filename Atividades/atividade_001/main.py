@@ -64,17 +64,20 @@ def pesquisar_cliente(cliente_id:int):
 # Rota para cadastrar uma nova reserva -- FALTA VALIDAR A DATA
 @app.post("/reservas/", response_model=Reserva)
 def cadastro_reserva(nova_reserva:Reserva):
-    for cli_index, cliente in enumerate(clientes): # Percorer a lista de clientes
-        if cliente.cli_id == nova_reserva.res_cliente_id: # Verificando se o cliente existe
-            for car_index, carro in enumerate(carros): # Esse for serve pra percorer a lista de carros
-                if carro.car_id == nova_reserva.res_carro_id and carro.car_disponivel == True: # Aqui eu verifico se o id é o mesmo e também se o carro tá disponível
-                    carros[car_index].car_disponivel = False # Se der tudo certo o carro altomaticamente fica como indisponível
-                    reservas.append(nova_reserva) # Adiciono a nova reserva
-                    return nova_reserva
-            # Se não der certo
-            raise HTTPException(status_code=404, detail="Esse carro não está disponível")
-    # Se o clinete não existir
-    raise HTTPException(status_code=404, detail="Cliente inexistente")
+    if nova_reserva.res_data_fim >= nova_reserva.res_data_inicio: # Aqui eu verifico se a data fianl é maior que a data inicial!
+        for cli_index, cliente in enumerate(clientes): # Percorer a lista de clientes
+            if cliente.cli_id == nova_reserva.res_cliente_id: # Verificando se o cliente existe
+                for car_index, carro in enumerate(carros): # Esse for serve pra percorer a lista de carros
+                    if carro.car_id == nova_reserva.res_carro_id and carro.car_disponivel == True: # Aqui eu verifico se o id é o mesmo e também se o carro tá disponível
+                        carros[car_index].car_disponivel = False # Se der tudo certo o carro altomaticamente fica como indisponível
+                        reservas.append(nova_reserva) # Adiciono a nova reserva
+                        return nova_reserva
+                # Se não der certo
+                raise HTTPException(status_code=404, detail="Esse carro não está disponível")
+        # Se o clinete não existir
+        raise HTTPException(status_code=404, detail="Cliente inexistente")
+    # Esse HTTPException serve como o tratamento de erro, porque quando a data não tá OK, ele retorna status 500 - Erro interno no servidor (problema no código ou sistema do servidor) -, aí eu trato isso aqui
+    raise HTTPException(status_code=500, detail="Datas inconsistentes!")
 
 # Rota para listar todas as reservas
 @app.get("/reservas/", response_model=List[Reserva]) # Lista de reservas
