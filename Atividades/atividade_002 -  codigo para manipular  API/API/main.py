@@ -27,4 +27,12 @@ def deletar_livro(titulo:str):
 def criar_livro(livro:Livro):
     livros.append(livro)
     return livro
+    
+
+@app.put("/livros/{titulo}", response_model=Livro)
+def atualizar_livro(titulo: str, livro_editado: Livro):
+    for index, livro in enumerate(livros):
+        if livro.titulo == titulo:
+            livros[index] = livro_editado
+            return livro_editado
     raise HTTPException(404,"Não localizado")
