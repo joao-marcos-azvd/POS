@@ -33,7 +33,7 @@ SQLModel.metadata.create_all(engine)
 
 @app.on_event("startup")
 def importar_csv():
-    df = pd.read_csv("C:/Users/20221101110036/Documents/POS/Atividades/atividade_005 - SQLModel/20250702_Pedidos_csv_2025.csv", encoding="utf-16", sep=";")
+    df = pd.read_csv("C:/Users/20221101110036/POS/Atividades/atividade_005 - SQLModel/20250702_Pedidos_csv_2025.csv", encoding="utf-16", sep=";")
     pedidos = [Pedido(**row) for row in df.to_dict(orient="records")]
     with Session(engine) as session:
         if not session.exec(select(Pedido)).first():
