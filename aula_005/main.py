@@ -2,9 +2,16 @@ from fastapi import FastAPI,HTTPException
 from models import Usuario,Livro,Biblioteca,Emprestimo
 from typing import List
 import datetime
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # durante o desenvolvimento
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 bibliotecas: List[Biblioteca] = []
 
